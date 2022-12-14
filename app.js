@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import userRouter from "./routing/user-routes";
 import postRouter from "./routing/post-routes";
 import cors from "cors";
-import  Path  from "path";
+import  path  from "path";
 
 const app = express();
 dotenv.config();
@@ -15,11 +15,15 @@ app.use(express.json());
 app.use("/user", userRouter);
 app.use("/posts", postRouter);
 
-// connect frontend 
-app.use(express.static(Path.join("./frontend/build"))); 
-app.get("*" , (req,res)=> {
-  res.sendFile(Path.join("./frontend/build/index.html"))
-})
+app.use(express.static(path.join(__dirname , "./frontend/build"))); 
+app.get("*", function (_, res) {
+  res.sendFile(
+    path.join(__dirname, "./frontend/build/index.html"),
+    function (err) {
+      res.status(500).send(err);
+    }
+  );
+});
 
 
 // connections
